@@ -117,6 +117,18 @@ if uploaded_file is not None:
         summary = calculate_summary_metrics(df)
         display_kpi_row(summary)
 
+        # Segment breakdown
+        segment_counts = df["segment"].value_counts()
+        col1, col2, col3, col4 = st.columns(4)
+        with col1:
+            st.metric("AAA", f"{segment_counts.get('AAA', 0):,}")
+        with col2:
+            st.metric("B-Tier", f"{segment_counts.get('B-Tier', 0):,}")
+        with col3:
+            st.metric("Non-Demo", f"{segment_counts.get('Non-Demo', 0):,}")
+        with col4:
+            st.metric("Unknown", f"{segment_counts.get('Unknown', 0) + (len(df) - segment_counts.sum()):,}")
+
         st.divider()
 
         # Tabs
