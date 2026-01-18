@@ -136,28 +136,26 @@ if uploaded_file is not None:
 
         st.divider()
 
-        # Lead breakdown by segment
-        st.subheader("Leads by Segment")
-        total = len(df)
+        # Breakdown by segment - Leads Booked vs Demos Held
+        st.subheader("By Segment")
+
+        # Calculate segment stats
+        total_leads = len(df)
+        df_held = df[df["is_demo_held"]]
+        total_held = len(df_held)
+
+        segment_leads = df["segment"].value_counts()
+        segment_demos = df_held["segment"].value_counts()
+
         col1, col2, col3, col4 = st.columns(4)
 
-        aaa_count = segment_counts.get('AAA', 0)
-        btier_count = segment_counts.get('B-Tier', 0)
-        nondemo_count = segment_counts.get('Non-Demo', 0)
-        unknown_count = total - aaa_count - btier_count - nondemo_count
-
-        with col1:
-            pct = (aaa_count / total * 100) if total > 0 else 0
-            st.metric("AAA", f"{aaa_count:,}", delta=f"{pct:.0f}%", delta_color="off")
-        with col2:
-            pct = (btier_count / total * 100) if total > 0 else 0
-            st.metric("B-Tier", f"{btier_count:,}", delta=f"{pct:.0f}%", delta_color="off")
-        with col3:
-            pct = (nondemo_count / total * 100) if total > 0 else 0
-            st.metric("Non-Demo", f"{nondemo_count:,}", delta=f"{pct:.0f}%", delta_color="off")
-        with col4:
-            pct = (unknown_count / total * 100) if total > 0 else 0
-            st.metric("Unknown", f"{unknown_count:,}", delta=f"{pct:.0f}%", delta_color="off")
+        for col, segment in zip([col1, col2, col3, col4], ["AAA", "B-Tier", "Non-Demo", "Unknown"]):
+            with col:
+                leads = segment_leads.get(segment, 0)
+                demos = segment_demos.get(segment, 0)
+                st.markdown(f"**{segment}**")
+                st.caption(f"Leads: {leads:,}")
+                st.caption(f"Demos: {demos:,}")
 
         st.divider()
 
