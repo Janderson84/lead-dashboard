@@ -188,7 +188,8 @@ if uploaded_file is not None:
                         table_df,
                         column_config=get_column_config(),
                         use_container_width=True,
-                        hide_index=True
+                        hide_index=True,
+                        height=400
                     )
 
                     # Download button
@@ -228,7 +229,8 @@ if uploaded_file is not None:
                         table_df,
                         column_config=get_column_config(),
                         use_container_width=True,
-                        hide_index=True
+                        hide_index=True,
+                        height=400
                     )
 
                     csv = table_df.to_csv(index=False)
@@ -256,7 +258,8 @@ if uploaded_file is not None:
                         table_df,
                         column_config=get_column_config(),
                         use_container_width=True,
-                        hide_index=True
+                        hide_index=True,
+                        height=400
                     )
 
                     csv = table_df.to_csv(index=False)
@@ -300,7 +303,8 @@ if uploaded_file is not None:
                             table_df,
                             column_config=get_column_config(),
                             use_container_width=True,
-                            hide_index=True
+                            hide_index=True,
+                        height=400
                         )
             else:
                 st.info("No demo-held deals in the selected data.")
@@ -333,7 +337,8 @@ if uploaded_file is not None:
                             table_df,
                             column_config=get_column_config(),
                             use_container_width=True,
-                            hide_index=True
+                            hide_index=True,
+                        height=400
                         )
             else:
                 st.info("No demo-held deals in the selected data.")
@@ -354,7 +359,8 @@ if uploaded_file is not None:
                         table_df,
                         column_config=get_column_config(),
                         use_container_width=True,
-                        hide_index=True
+                        hide_index=True,
+                        height=400
                     )
 
                     csv = table_df.to_csv(index=False)
