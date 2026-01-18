@@ -113,21 +113,51 @@ if uploaded_file is not None:
         st.warning("No data matches the selected filters. Please adjust your filter criteria.")
     else:
         # KPI Summary
-        st.header("Summary")
         summary = calculate_summary_metrics(df)
-        display_kpi_row(summary)
-
-        # Segment breakdown
         segment_counts = df["segment"].value_counts()
-        col1, col2, col3, col4 = st.columns(4)
+
+        # Performance metrics
+        st.subheader("Performance")
+        col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("AAA", f"{segment_counts.get('AAA', 0):,}")
+            st.metric("Demos Held", f"{summary['demos_held']:,}",
+                      help="Demos assigned to an AE")
         with col2:
-            st.metric("B-Tier", f"{segment_counts.get('B-Tier', 0):,}")
+            st.metric("Won", f"{summary['won']:,}")
         with col3:
-            st.metric("Non-Demo", f"{segment_counts.get('Non-Demo', 0):,}")
+            st.metric("Won %", f"{summary['won_pct']:.1%}")
+
+        col4, col5 = st.columns(2)
         with col4:
-            st.metric("Unknown", f"{segment_counts.get('Unknown', 0) + (len(df) - segment_counts.sum()):,}")
+            st.metric("Won Value", f"${summary['won_value']:,.0f}")
+        with col5:
+            st.metric("No-Show Rate", f"{summary['noshow_pct']:.1%}",
+                      help="Demos not assigned to an AE")
+
+        st.divider()
+
+        # Lead breakdown by segment
+        st.subheader("Leads by Segment")
+        total = len(df)
+        col1, col2, col3, col4 = st.columns(4)
+
+        aaa_count = segment_counts.get('AAA', 0)
+        btier_count = segment_counts.get('B-Tier', 0)
+        nondemo_count = segment_counts.get('Non-Demo', 0)
+        unknown_count = total - aaa_count - btier_count - nondemo_count
+
+        with col1:
+            pct = (aaa_count / total * 100) if total > 0 else 0
+            st.metric("AAA", f"{aaa_count:,}", delta=f"{pct:.0f}%", delta_color="off")
+        with col2:
+            pct = (btier_count / total * 100) if total > 0 else 0
+            st.metric("B-Tier", f"{btier_count:,}", delta=f"{pct:.0f}%", delta_color="off")
+        with col3:
+            pct = (nondemo_count / total * 100) if total > 0 else 0
+            st.metric("Non-Demo", f"{nondemo_count:,}", delta=f"{pct:.0f}%", delta_color="off")
+        with col4:
+            pct = (unknown_count / total * 100) if total > 0 else 0
+            st.metric("Unknown", f"{unknown_count:,}", delta=f"{pct:.0f}%", delta_color="off")
 
         st.divider()
 
